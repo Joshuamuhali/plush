@@ -1,0 +1,238 @@
+import { useParams, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { MapPin, Bed, Bath, Square, ArrowLeft, MessageCircle, Phone, Home, Layers, Building2 } from "lucide-react";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
+import { motion } from "framer-motion";
+import { sampleProperties } from "@/data/properties";
+import { Property } from "@/types/property";
+
+const PropertyDetail = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  // Find the property by id or slug
+  const property = sampleProperties.find(
+    p => p.id === id || p.slug === id
+  );
+
+  if (!property) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4">Property Not Found</h2>
+          <p className="text-muted-foreground mb-6">The property you're looking for doesn't exist or has been removed.</p>
+          <Button onClick={() => navigate('/listings')}>Back to Listings</Button>
+        </div>
+      </div>
+    );
+  }
+
+  // Format price
+  const formatPrice = (price: number, currency: string) => {
+    return `${currency} ${price.toLocaleString()}${property.type === 'plot' || property.type === 'land' ? '' : ' / month'}`;
+  };
+
+  // Get property type icon
+  const getPropertyTypeIcon = (type: string) => {
+    switch (type) {
+      case 'house':
+        return <Home className="w-5 h-5 mr-2" />;
+      case 'apartment':
+        return <Building2 className="w-5 h-5 mr-2" />;
+      case 'plot':
+      case 'land':
+        return <Layers className="w-5 h-5 mr-2" />;
+      default:
+        return <Home className="w-5 h-5 mr-2" />;
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Navigation />
+      
+      <main className="flex-1">
+        {/* Back Button */}
+        <div className="container mx-auto px-4 py-6">
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Listings
+          </Button>
+        </div>
+
+        {/* Property Images */}
+        <div className="relative h-96 bg-muted/50 overflow-hidden">
+          <img
+            src={property.images[0]?.url || '/placeholder.svg'}
+            alt={property.title}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute bottom-4 right-4">
+            <Badge 
+              variant={property.status === 'available' ? 'default' : 'destructive'}
+              className="px-3 py-1.5 text-sm capitalize"
+            >
+              {property.status}
+            </Badge>
+          </div>
+        </div>
+
+        {/* Property Details */}
+        <div className="container mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-2">
+              <div className="flex items-start justify-between mb-4 flex-col md:flex-row gap-4">
+                <div>
+                  <h1 className="text-2xl md:text-3xl font-bold">{property.title}</h1>
+                  <div className="flex items-center text-muted-foreground mt-2">
+                    <MapPin className="h-4 w-4 mr-1 flex-shrink-0" />
+                    <span>{property.location.address}, {property.location.city}</span>
+                  </div>
+                </div>
+                <div className="text-xl md:text-2xl font-bold text-primary">
+                  {formatPrice(property.price.amount, property.price.currency)}
+                </div>
+              </div>
+
+              {/* Property Type */}
+              <div className="flex items-center mb-6 text-sm">
+                <span className="bg-muted px-3 py-1 rounded-full flex items-center">
+                  {getPropertyTypeIcon(property.type)}
+                  <span className="capitalize">{property.type}</span>
+                </span>
+              </div>
+
+              {/* Features */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                {property.features.bedrooms !== undefined && (
+                  <div className="flex items-center">
+                    <Bed className="h-5 w-5 mr-2 text-muted-foreground" />
+                    <span>{property.features.bedrooms} Bedrooms</span>
+                  </div>
+                )}
+                {property.features.bathrooms !== undefined && (
+                  <div className="flex items-center">
+                    <Bath className="h-5 w-5 mr-2 text-muted-foreground" />
+                    <span>{property.features.bathrooms} Bathrooms</span>
+                  </div>
+                )}
+                <div className="flex items-center">
+                  <Square className="h-5 w-5 mr-2 text-muted-foreground" />
+                  <span>{property.features.area} m²</span>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className="mb-8">
+                <h2 className="text-xl font-semibold mb-4">Description</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  {property.description}
+                </p>
+              </div>
+
+              {/* Amenities */}
+              {property.amenities && property.amenities.length > 0 && (
+                <div className="mb-8">
+                  <h2 className="text-xl font-semibold mb-4">Amenities</h2>
+                  <div className="flex flex-wrap gap-2">
+                    {property.amenities.map((amenity, index) => (
+                      <Badge key={index} variant="outline" className="px-3 py-1">
+                        {amenity}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Additional Images */}
+              {property.images.length > 1 && (
+                <div className="mb-8">
+                  <h2 className="text-xl font-semibold mb-4">Gallery</h2>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {property.images.slice(1).map((img, index) => (
+                      <div key={index} className="aspect-square overflow-hidden rounded-lg">
+                        <img
+                          src={img.url}
+                          alt={`${property.title} - ${index + 1}`}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Sidebar */}
+            <div className="lg:col-span-1">
+              <div className="bg-muted/50 rounded-lg p-6 sticky top-24">
+                <h3 className="text-lg font-semibold mb-4">Contact Agent</h3>
+                <div className="space-y-4">
+                  <Button className="w-full">
+                    <MessageCircle className="h-4 w-4 mr-2" />
+                    Send Message
+                  </Button>
+                  <Button variant="outline" className="w-full">
+                    <Phone className="h-4 w-4 mr-2" />
+                    Call Now
+                  </Button>
+                </div>
+
+                <div className="mt-8">
+                  <h4 className="font-medium mb-2">Property Details</h4>
+                  <div className="space-y-2 text-sm text-muted-foreground">
+                    <div className="flex justify-between">
+                      <span>Property ID:</span>
+                      <span className="font-medium">{property.id}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Price:</span>
+                      <span className="font-medium">
+                        {formatPrice(property.price.amount, property.price.currency)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Property Type:</span>
+                      <span className="capitalize">{property.type}</span>
+                    </div>
+                    {property.features.bedrooms !== undefined && (
+                      <div className="flex justify-between">
+                        <span>Bedrooms:</span>
+                        <span>{property.features.bedrooms}</span>
+                      </div>
+                    )}
+                    {property.features.bathrooms !== undefined && (
+                      <div className="flex justify-between">
+                        <span>Bathrooms:</span>
+                        <span>{property.features.bathrooms}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between">
+                      <span>Area:</span>
+                      <span>{property.features.area} m²</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Status:</span>
+                      <span className="capitalize">{property.status}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      
+      <Footer />
+    </div>
+  );
+};
+
+export default PropertyDetail;
