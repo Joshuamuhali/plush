@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="50" viewBox="0 0 80 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- P Letter -->
+  <path d="M10 10H25C32.1797 10 38 15.8203 38 23C38 30.1797 32.1797 36 25 36H10V10Z" fill="#3B82F6"/>
+  <path d="M10 10H25C32.1797 10 38 15.8203 38 23C38 30.1797 32.1797 36 25 36H10V10Z" fill="url(#paint0_linear_1_2)" fill-opacity="0.8"/>
+  <path d="M10 18H25C28.3137 18 31 20.6863 31 24C31 27.3137 28.3137 30 25 30H10V18Z" fill="white"/>
+  
+  <!-- House Icon -->
+  <path d="M50 25L40 15V5H45V15H55V5H60V15L50 25Z" fill="#3B82F6"/>
+  <path d="M50 25L40 15V5H45V15H55V5H60V15L50 25Z" fill="url(#paint1_linear_1_2)" fill-opacity="0.8"/>
+  <path d="M45 15V25H55V15H45Z" fill="white"/>
+  
+  <defs>
+    <linearGradient id="paint0_linear_1_2" x1="24" y1="10" x2="24" y2="36" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <linearGradient id="paint1_linear_1_2" x1="50" y1="5" x2="50" y2="25" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#1D4ED8"/>
+    </linearGradient>
+  </defs>
+</svg>

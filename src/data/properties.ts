@@ -2,121 +2,163 @@ import { Property } from '@/types/property';
 
 // Images for Chilanga property
 const chilangaImages = [
-  { url: '/chilanga1.jpeg', alt: 'Chilanga Plot - Front View', isPrimary: true },
-  { url: '/chilanga2.jpeg', alt: 'Chilanga Plot - Side View', isPrimary: false },
-  { url: '/chilanga3.jpeg', alt: 'Chilanga Plot - Location View', isPrimary: false },
-  { url: '/chilanga4.jpeg', alt: 'Chilanga Plot - Surrounding Area', isPrimary: false },
+  { url: '/chilanga1.jpeg', alt: '25x40m Plot in Chilanga - Main Entrance', isPrimary: true },
+  { url: '/chilanga2.jpeg', alt: '25x40m Plot in Chilanga - Plot Layout', isPrimary: false },
+  { url: '/chilanga3.jpeg', alt: '25x40m Plot in Chilanga - Scenic View', isPrimary: false },
+  { url: '/chilanga4.jpeg', alt: '25x40m Plot in Chilanga - Nearby Development', isPrimary: false },
 ];
 
 // Images for Silverest property
 const silverestImages = [
-  { url: '/Silverest 1.5km1.jpeg', alt: 'Silverest Plot - Front View', isPrimary: true },
-  { url: '/Silverest 1.5km2.jpeg', alt: 'Silverest Plot - Side View', isPrimary: false },
-  { url: '/Silverest 1.5km3.jpeg', alt: 'Silverest Plot - Location View', isPrimary: false },
-  { url: '/Silverest 1.5km4.jpeg', alt: 'Silverest Plot - Surrounding Area', isPrimary: false },
+  { url: '/Silverest%201.5km1.jpeg', alt: 'Silverest Plot - Front View', isPrimary: true },
+  { url: '/Silverest%201.5km2.jpeg', alt: 'Silverest Plot - Side View', isPrimary: false },
+  { url: '/Silverest%201.5km3.jpeg', alt: 'Silverest Plot - Location View', isPrimary: false },
+  { url: '/Silverest%201.5km4.jpeg', alt: 'Silverest Plot - Surrounding Area', isPrimary: false },
+];
+
+// Images for Luxury Home
+const luxuryHomeImages = [
+  { url: '/IMG_3908.jpeg', alt: 'Luxury Home - Front View', isPrimary: true },
+  { url: '/IMG_3909.jpeg', alt: 'Luxury Home - Living Area', isPrimary: false },
+  { url: '/IMG_3910.jpeg', alt: 'Luxury Home - Bedroom', isPrimary: false },
+  { url: '/IMG_3911.jpeg', alt: 'Luxury Home - Backyard', isPrimary: false },
 ];
 
 export const sampleProperties: Property[] = [
-  // Shops in Kabulonga
-  {
-    id: 'shop-kab-1',
-    title: 'Modern Shop in Kabulonga',
-    description: 'Prime location shop in Kabulonga, perfect for retail business. 80 sqm with high foot traffic.',
-    type: 'shop',
-    location: {
-      address: '123 Kabulonga Road',
-      city: 'Lusaka',
-      district: 'Kabulonga'
-    },
-    price: { amount: 2000, currency: 'USD', period: 'month', isNegotiable: true },
-    features: { area: 80 },
-    images: [{ url: '/placeholder.svg', alt: 'Shop in Kabulonga', isPrimary: true }],
-    isFeatured: true,
-    status: 'available',
-    listedAt: '2025-01-15',
-    updatedAt: '2025-09-01',
-    slug: 'modern-shop-kabulonga-1'
-  },
-  // Apartments in Kabulonga
-  {
-    id: 'apt-kab-1',
-    title: 'Luxury Apartment in Kabulonga',
-    description: 'Beautiful 3-bedroom apartment with modern finishes in the heart of Kabulonga. Close to restaurants and shopping.',
-    type: 'apartment',
-    location: {
-      address: '456 Kabulonga Road',
-      city: 'Lusaka',
-      district: 'Kabulonga'
-    },
-    price: { amount: 2500, currency: 'USD', period: 'month', isNegotiable: true },
-    features: { bedrooms: 3, bathrooms: 2, area: 150 },
-    images: [{ url: '/placeholder.svg', alt: 'Luxury Apartment', isPrimary: true }],
-    isFeatured: true,
-    status: 'available',
-    listedAt: '2025-02-10',
-    updatedAt: '2025-08-28',
-    slug: 'luxury-apartment-kabulonga-1'
-  },
-  // Plots in Kabulonga
-  {
-    id: 'plot-kab-1',
-    title: 'Residential Plot in Kabulonga',
-    description: 'Prime residential plot in Kabulonga, 50x100 feet with all services available. Ready for construction.',
-    type: 'plot',
-    location: {
-      address: 'Plot 789, Kabulonga',
-      city: 'Lusaka',
-      district: 'Kabulonga'
-    },
-    price: { amount: 150000, currency: 'USD', period: 'total', isNegotiable: false },
-    features: { area: 5000 },
-    images: [{ url: '/placeholder.svg', alt: 'Residential Plot', isPrimary: true }],
-    isFeatured: true,
-    status: 'available',
-    listedAt: '2025-03-05',
-    updatedAt: '2025-09-02',
-    slug: 'residential-plot-kabulonga-1'
-  },
-  // Houses in Kabulonga
-  {
-    id: 'house-kab-1',
-    title: '4-Bedroom House in Kabulonga',
-    description: 'Spacious family home in a quiet Kabulonga neighborhood. Features a large garden and modern amenities.',
-    type: 'house',
-    location: {
-      address: '101 Kabulonga Close',
-      city: 'Lusaka',
-      district: 'Kabulonga'
-    },
-    price: { amount: 3500, currency: 'USD', period: 'month', isNegotiable: true },
-    features: { bedrooms: 4, bathrooms: 3, area: 300 },
-    images: [{ url: '/placeholder.svg', alt: 'Family House', isPrimary: true }],
-    isFeatured: true,
-    status: 'available',
-    listedAt: '2025-04-12',
-    updatedAt: '2025-08-30',
-    slug: 'house-kabulonga-1'
-  },
   // Plot 1: 25x40 Plot in Chilanga
   {
-    id: 'plot-chil-1',
-    title: '25x40m Plot in Chilanga',
-    description: 'Prime residential plot in Chilanga, 25x40 meters with land title. Only 4 kilometers from Farmers Junction. Perfect for residential development with all necessary utilities available nearby.',
+    id: '1',
+    title: '25x40m Prime Plot in Chilanga',
+    description: 'A premium 1000 square meter (25m x 40m) residential plot located in the rapidly developing area of Chilanga. This prime property offers a perfect opportunity to build your dream home in a serene environment with easy access to major amenities. The plot is situated in a well-planned neighborhood with excellent road infrastructure and all necessary utilities available nearby.',
     type: 'plot',
+    category: 'residential',
     location: {
-      address: 'Near Farmers Junction',
-      city: 'Chilanga',
-      district: 'Chilanga'
+      address: 'Chilanga District, Off Leopards Hill Road',
+      city: 'Lusaka',
+      district: 'Chilanga',
+      coordinates: {
+        lat: -15.5515,
+        lng: 28.3036
+      },
+      landmarks: [
+        '2km from Leopards Hill Mall',
+        '3km from Makeni Shopping Center',
+        '5km from University of Zambia (UNZA)',
+        '15km from Lusaka City Center'
+      ]
     },
-    price: { amount: 180000, currency: 'ZMW', isNegotiable: true },
-    features: { area: 1000 }, // 25m x 40m = 1000 sqm
+    price: { 
+      amount: 180000, 
+      currency: 'ZMW', 
+      isNegotiable: true,
+      paymentTerms: ['Cash', 'Bank Transfer', 'Payment Plan Available']
+    },
+    features: { 
+      area: 1000, // 25m x 40m = 1000 sqm
+      dimensions: '25m x 40m',
+      zoning: 'Residential',
+      terrain: 'Flat and well-drained',
+      accessibility: 'All-weather road access',
+      fencing: 'Not fenced',
+      topography: 'Slightly elevated with good natural drainage',
+      view: 'Panoramic views of surrounding area',
+      soilType: 'Stable clay-loam soil',
+      vegetation: 'Minimal clearing required'
+    },
+    area: 1000, // For backward compatibility
     images: chilangaImages,
     isFeatured: true,
     status: 'available',
     listedAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     slug: '25x40-plot-chilanga',
-    amenities: ['Title Deed', 'Access Road', 'Near Shopping Center', 'Quiet Neighborhood']
+    amenities: [
+      'Title Deed Available',
+      'Access to Paved Road',
+      'Water Connection Available',
+      'Electricity Available',
+      'Sewer System Available',
+      'Security Patrolled Area',
+      'Nearby Schools',
+      'Shopping Centers in Proximity',
+      'Public Transport Access',
+      'Quiet Neighborhood',
+      'Good Road Network',
+      'Drainage System',
+      'Street Lighting',
+      'Nearby Medical Facilities'
+    ],
+    additionalInfo: {
+      ownership: 'Freehold',
+      planningPermission: 'Residential development approved',
+      infrastructure: {
+        water: 'Mains connection available',
+        electricity: 'Grid connection available',
+        roads: 'Paved access road',
+        internet: 'Fiber optic available',
+        sewerage: 'Mains connection available'
+      },
+      developmentPotential: 'Ideal for residential housing development',
+      investmentPotential: 'High appreciation potential in the area',
+      neighborhood: 'Growing residential area with mixed development',
+      security: 'Low crime rate, community watch program',
+      futureDevelopment: 'Planned commercial center within 2km radius'
+    },
+    documents: [
+      { name: 'Title Deed', type: 'pdf', url: '/documents/chilanga-title-deed.pdf' },
+      { name: 'Zoning Certificate', type: 'pdf', url: '/documents/chilanga-zoning.pdf' },
+      { name: 'Survey Diagram', type: 'jpg', url: '/documents/chilanga-survey.jpg' }
+    ],
+    virtualTour: 'https://my.matterport.com/show/?m=1234567890',
+    videoTour: 'https://www.youtube.com/embed/example123',
+    contactPerson: {
+      name: 'John Banda',
+      phone: '+260 97 123 4567',
+      email: 'john.banda@plushproperties.com',
+      role: 'Sales Executive',
+      availableHours: 'Mon-Fri 8:00 AM - 5:00 PM',
+      languages: ['English', 'Nyanja', 'Bemba']
+    },
+    similarProperties: ['2', '3']
+  },
+  // Luxury Home in Lusaka
+  {
+    id: 'home-lux-1',
+    title: 'Luxury 4-Bedroom Home',
+    description: 'Stunning 4-bedroom luxury home with all self-contained en-suite bathrooms. Features include a swimming pool, laundry room, TV room, workers quarters, study room, extra room, and pantry. Situated on a 1709 sqm plot size near American International School.',
+    type: 'house',
+    bedrooms: 4,
+    bathrooms: 4,
+    location: {
+      address: 'Near American International School',
+      city: 'Lusaka',
+      district: 'Lusaka'
+    },
+    price: { amount: 350000, currency: 'USD', isNegotiable: false },
+    features: { 
+      area: 1709,
+      bedrooms: 4,
+      bathrooms: 4,
+      parking: 2
+    },
+    area: 1709,
+    images: luxuryHomeImages,
+    isFeatured: true,
+    status: 'available',
+    listedAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    slug: 'luxury-4-bedroom-home-lusaka',
+    amenities: [
+      'Swimming Pool',
+      'All En-suite Bathrooms',
+      'Laundry Room',
+      'TV Room',
+      'Workers Quarters',
+      'Study Room',
+      'Pantry',
+      'Large Plot (1709 sqm)',
+      'Near American International School'
+    ]
   },
   // Plot 2: Silverest 1.5km from Unilus
   {
@@ -131,6 +173,7 @@ export const sampleProperties: Property[] = [
     },
     price: { amount: 350000, currency: 'ZMW', isNegotiable: true },
     features: { area: 900 }, // 30m x 30m = 900 sqm
+    area: 900, // For backward compatibility
     images: silverestImages,
     isFeatured: true,
     status: 'available',
@@ -139,43 +182,4 @@ export const sampleProperties: Property[] = [
     slug: 'silverest-plot-unilus',
     amenities: ['Title Deed', 'Access Road', 'Gated Community', 'Near UNILUS']
   },
-  // Properties in other areas
-  {
-    id: 'shop-wood-1',
-    title: 'Corner Shop in Woodlands',
-    description: 'High-traffic corner shop in Woodlands, perfect for retail business.',
-    type: 'shop',
-    location: {
-      address: '200 Woodlands Road',
-      city: 'Lusaka',
-      district: 'Woodlands'
-    },
-    price: { amount: 1800, currency: 'USD', period: 'month', isNegotiable: true },
-    features: { area: 60 },
-    images: [{ url: '/placeholder.svg', alt: 'Corner Shop', isPrimary: true }],
-    isFeatured: false,
-    status: 'available',
-    listedAt: '2025-05-20',
-    updatedAt: '2025-08-25',
-    slug: 'corner-shop-woodlands-1'
-  },
-  {
-    id: 'apt-avon-1',
-    title: 'Modern Apartment in Avondale',
-    description: 'Newly renovated 2-bedroom apartment in Avondale, close to amenities.',
-    type: 'apartment',
-    location: {
-      address: '300 Avondale Road',
-      city: 'Lusaka',
-      district: 'Avondale'
-    },
-    price: { amount: 1800, currency: 'USD', period: 'month', isNegotiable: false },
-    features: { bedrooms: 2, bathrooms: 2, area: 120 },
-    images: [{ url: '/placeholder.svg', alt: 'Modern Apartment', isPrimary: true }],
-    isFeatured: true,
-    status: 'available',
-    listedAt: '2025-06-15',
-    updatedAt: '2025-08-28',
-    slug: 'modern-apartment-avondale-1'
-  }
 ];

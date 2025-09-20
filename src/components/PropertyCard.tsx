@@ -4,20 +4,21 @@ import { MapPin, Bed, Bath, Square, Home, Building2, Layers } from "lucide-react
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 
-interface PropertyCardProps {
-  id: string;
-  title: string;
-  type: string;
-  price: number;
-  currency?: string;
-  location: string;
-  image: string;
-  bedrooms?: number;
-  bathrooms?: number;
-  area: number;
-  status: string;
+import { Property, PropertyPrice, PropertyLocation, PropertyType } from "@/types/property";
+
+type PropertyCardProps = Omit<Property, 'features'> & {
+  // Additional props specific to the card component
+  className?: string;
+  key?: string;
+  // Make some required props from Property optional for backward compatibility
+  status?: Property['status'];
   slug: string;
-}
+  // For backward compatibility with direct props
+  image?: string;
+  currency?: string;
+  // Include features as an optional property
+  features?: Property['features'];
+};
 
 const PropertyCard = ({
   id,
@@ -26,18 +27,58 @@ const PropertyCard = ({
   price,
   currency = 'ZMW',
   location,
+  images = [],
   image,
   bedrooms,
   bathrooms,
   area,
+  features = {},
   status = 'available',
-  slug
+  slug,
+  className = ''
 }: PropertyCardProps) => {
   const navigate = useNavigate();
 
   const handleViewDetails = () => {
     navigate(slug ? `/property/${slug}` : `/property/${id}`);
   };
+
+  const formatPrice = (price: number | PropertyPrice, currency: string) => {
+    try {
+      if (typeof price === 'number') {
+        return new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: currency,
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).format(price);
+      } else if (typeof price === 'object' && price !== null) {
+        const formattedAmount = new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: price.currency || currency,
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).format(price.amount);
+        
+        const period = price.period && price.period !== 'total' ? `/${price.period}` : '';
+        
+        return `${formattedAmount}${period}`;
+      }
+      return 'Price on request';
+    } catch (error) {
+      console.error('Error formatting price:', error);
+      return 'Price on request';
+    }
+  };
+
+  // Format location to string if it's a PropertyLocation object
+  const formatLocation = (location: string | PropertyLocation): string => {
+    if (typeof location === 'string') return location;
+    return [location.address, location.city, location.district]
+      .filter(Boolean)
+      .join(', ');
+  };
+
   // Get property type icon
   const getPropertyTypeIcon = (type: string) => {
     switch (type.toLowerCase()) {
@@ -53,14 +94,48 @@ const PropertyCard = ({
     }
   };
 
+  // Get primary image or first image
+  const getPrimaryImage = () => {
+    // If there's a direct image prop, use it first
+    if (image) return image;
+    
+    // If no images array, use placeholder
+    if (!images || images.length === 0) {
+      return '/placeholder-property.jpg';
+    }
+    
+    // Handle string array format
+    if (typeof images[0] === 'string') {
+      return (images as string[])[0];
+    }
+    
+    // Handle PropertyImage array format
+    const imageArray = images as Array<{url: string, isPrimary?: boolean}>;
+    const primary = imageArray.find(img => img.isPrimary);
+    return primary ? primary.url : imageArray[0].url;
+  };
+  
+  const primaryImage = getPrimaryImage();
+  
+  // Get area from features or direct prop
+  const propertyArea = area || features?.area || 0;
+  
+  // Get bedrooms and bathrooms from features or direct props
+  const propertyBedrooms = bedrooms ?? features?.bedrooms;
+  const propertyBathrooms = bathrooms ?? features?.bathrooms;
+
   return (
-    <Card className="overflow-hidden border border-border/30 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 h-full flex flex-col">
+    <Card className={`overflow-hidden border border-border/30 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 h-full flex flex-col ${className}`}>
       {/* Property Image */}
       <div className="relative aspect-[4/3] overflow-hidden group">
         <img
-          src={image}
+          src={primaryImage}
           alt={title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = '/placeholder-property.jpg';
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
           <Badge 
@@ -79,43 +154,40 @@ const PropertyCard = ({
             <span className="capitalize">{type}</span>
           </div>
           <h3 className="text-lg font-bold text-foreground mb-2 line-clamp-2 h-14">{title}</h3>
-          <div className="flex items-center text-sm text-muted-foreground">
-            <MapPin className="w-3.5 h-3.5 mr-1.5 flex-shrink-0" />
-            <span className="truncate">{location}</span>
+          <div className="flex items-center text-sm text-gray-600">
+            <MapPin className="w-4 h-4 mr-1.5 flex-shrink-0" />
+            <span className="truncate">{formatLocation(location)}</span>
           </div>
         </div>
 
         <div className="mt-auto">
           <div className="flex justify-between items-center mb-4">
             <p className="text-xl font-bold text-primary">
-              {currency} {price.toLocaleString()}
+              {formatPrice(price, currency)}
               {!['plot', 'land'].includes(type.toLowerCase()) && (
                 <span className="text-sm font-normal text-muted-foreground">/month</span>
               )}
             </p>
             
             <div className="flex items-center space-x-3 text-sm text-muted-foreground">
-              {bedrooms !== undefined && (
-                <div className="flex items-center" title={`${bedrooms} ${bedrooms === 1 ? 'Bedroom' : 'Bedrooms'}`}>
+              {propertyBedrooms !== undefined && (
+                <div className="flex items-center" title={`${propertyBedrooms} ${propertyBedrooms === 1 ? 'Bedroom' : 'Bedrooms'}`}>
                   <Bed className="w-4 h-4 mr-1" />
                   <span className="sr-only">Bedrooms: </span>
-                  <span>{bedrooms}</span>
+                  <span>{propertyBedrooms}</span>
                 </div>
               )}
-              {bathrooms !== undefined && (
-                <div className="flex items-center" title={`${bathrooms} ${bathrooms === 1 ? 'Bathroom' : 'Bathrooms'}`}>
+              {propertyBathrooms !== undefined && (
+                <div className="flex items-center" title={`${propertyBathrooms} ${propertyBathrooms === 1 ? 'Bathroom' : 'Bathrooms'}`}>
                   <Bath className="w-4 h-4 mr-1" />
                   <span className="sr-only">Bathrooms: </span>
-                  <span>{bathrooms}</span>
+                  <span>{propertyBathrooms}</span>
                 </div>
               )}
               <div className="flex items-center" title="Area">
-                <Square className="w-3.5 h-3.5 mr-1" />
+                <Square className="w-4 h-4 mr-1" />
                 <span className="sr-only">Area: </span>
-                <span>{type.toLowerCase() === 'plot' || type.toLowerCase() === 'land' 
-                  ? `${area} acres` 
-                  : `${area} m²`}
-                </span>
+                <span>{propertyArea} m²</span>
               </div>
             </div>
           </div>
