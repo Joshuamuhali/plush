@@ -239,7 +239,7 @@ const PropertyDetail = () => {
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                       {property.amenities.map((amenity, index) => (
                         <div key={index} className="flex items-center">
-                          <div className="w-1.5 h-1.5 rounded-full bg-blue-600 mr-2"></div>
+                          <div className="w-1.5 h-1.5 rounded-full bg-primary mr-2"></div>
                           <span className="text-gray-600">{amenity}</span>
                         </div>
                       ))}
@@ -250,7 +250,7 @@ const PropertyDetail = () => {
                 {/* Contact Buttons */}
                 <div className="p-6 border-t">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700 h-12">
+                    <Button className="w-full bg-primary hover:bg-primary/90 h-12 text-primary-foreground">
                       <MessageCircle className="h-5 w-5 mr-2" />
                       Send Message
                     </Button>
@@ -335,7 +335,7 @@ const PropertyDetail = () => {
                 <Button 
                   variant="ghost" 
                   onClick={() => navigate(-1)}
-                  className="w-full text-blue-600 hover:bg-blue-50 flex items-center justify-center"
+                  className="w-full text-primary hover:bg-primary/10 flex items-center justify-center"
                 >
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back to Listings

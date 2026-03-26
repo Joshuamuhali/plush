@@ -319,13 +319,13 @@ export default function SearchBar({ onNoResults, className = '' }: SearchBarProp
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search this page..."
-              className="w-full pl-10 pr-10 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              className="w-full pl-10 pr-10 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary outline-none"
               aria-label="Search this page"
             />
             {searchProgress > 0 && searchProgress < 100 && (
-              <div className="absolute bottom-0 left-0 h-0.5 bg-blue-200">
+              <div className="absolute bottom-0 left-0 h-0.5 bg-secondary/30">
                 <div 
-                  className="h-full bg-blue-500 transition-all duration-300 ease-out"
+                  className="h-full bg-secondary transition-all duration-300 ease-out"
                   style={{ width: `${searchProgress}%` }}
                 />
               </div>

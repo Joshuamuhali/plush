@@ -113,13 +113,13 @@ export default function Leads() {
                   <TableCell className="text-sm">{lead.property}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <a href={`mailto:${lead.email}`} className="text-blue-600 hover:underline">
+                      <a href={`mailto:${lead.email}`} className="text-primary hover:text-primary/80">
                         <Mail className="h-4 w-4" />
                       </a>
-                      <a href={`tel:${lead.phone}`} className="text-green-600 hover:underline">
+                      <a href={`tel:${lead.phone}`} className="text-secondary hover:text-secondary/80">
                         <Phone className="h-4 w-4" />
                       </a>
-                      <button className="text-purple-600 hover:text-purple-800">
+                      <button className="text-accent hover:text-accent/80">
                         <MessageSquare className="h-4 w-4" />
                       </button>
                     </div>

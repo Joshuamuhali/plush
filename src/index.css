@@ -8,25 +8,25 @@
 
 @layer base {
   :root {
-    /* Plush Properties Brand Colors (HSL) */
+    /* Plush Properties Premium Dark Blue Palette */
     --background: 220 13% 95%;
     --foreground: 210 22% 22%;
 
-    /* Primary - Deep Blue-Grey (#2C3E50) */
-    --primary: 210 29% 24%;
+    /* Primary - Premium Dark Blue (#020c1c) */
+    --primary: 213 87% 6%;
     --primary-foreground: 0 0% 100%;
-    
-    /* Secondary - Green (#27AE60) */
-    --secondary: 145 63% 42%;
+
+    /* Secondary - Rich Teal (#0f4c5c) */
+    --secondary: 188 65% 25%;
     --secondary-foreground: 0 0% 100%;
 
-    /* Accent - Amber (#F39C12) */
-    --accent: 35 84% 62%;
-    --accent-foreground: 210 29% 24%;
+    /* Accent - Warm Amber (#d4af37) */
+    --accent: 45 77% 52%;
+    --accent-foreground: 213 87% 6%;
 
-    /* Neutral Colors */
-    --neutral-light: 192 15% 94%;
-    --neutral-dark: 210 22% 29%;
+    /* Neutral Colors - Premium Grays */
+    --neutral-light: 220 13% 94%;
+    --neutral-dark: 213 15% 25%;
 
     /* Card and Surface Colors */
     --card: 0 0% 100%;
@@ -43,19 +43,19 @@
 
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 210 29% 24%;
+    --ring: 213 87% 6%;
 
     --radius: 0.75rem;
 
-    /* Custom Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(210, 29%, 24%), hsl(210, 22%, 29%));
-    --gradient-secondary: linear-gradient(135deg, hsl(145, 63%, 42%), hsl(145, 63%, 48%));
-    --gradient-hero: linear-gradient(135deg, hsl(210, 29%, 24%) 0%, hsl(210, 22%, 29%) 50%, hsl(145, 63%, 42%) 100%);
+    /* Custom Gradients - Premium Dark Blue Theme */
+    --gradient-primary: linear-gradient(135deg, hsl(213, 87%, 6%), hsl(213, 87%, 12%));
+    --gradient-secondary: linear-gradient(135deg, hsl(188, 65%, 25%), hsl(188, 65%, 30%));
+    --gradient-hero: linear-gradient(135deg, hsl(213, 87%, 6%) 0%, hsl(213, 87%, 12%) 50%, hsl(188, 65%, 25%) 100%);
     
-    /* Shadows */
-    --shadow-elegant: 0 10px 30px -10px hsl(210 29% 24% / 0.3);
-    --shadow-card: 0 4px 20px -4px hsl(210 29% 24% / 0.15);
-    --shadow-glow: 0 0 40px hsl(145 63% 42% / 0.2);
+    /* Shadows - Premium Dark Blue Theme */
+    --shadow-elegant: 0 10px 30px -10px hsl(213 87% 6% / 0.3);
+    --shadow-card: 0 4px 20px -4px hsl(213 87% 6% / 0.15);
+    --shadow-glow: 0 0 40px hsl(188 65% 25% / 0.2);
 
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -170,5 +170,262 @@
 
   .transition-bounce {
     transition: var(--transition-bounce);
+  }
+
+  /* Custom Animations */
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.2s ease-out;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  /* Glass Morphism */
+  .glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .glass-dark {
+    background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Hover Effects */
+  .hover-lift {
+    transition: var(--transition-smooth);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-elegant);
+  }
+
+  .btn-hover-lift {
+    transform: translateY(0);
+    transition: var(--transition-bounce);
+  }
+
+  .btn-hover-lift:hover {
+    transform: translateY(-2px);
+  }
+
+  /* Card Enhancements */
+  .card-elevated {
+    @apply shadow-card rounded-xl transition-all duration-300;
+  }
+
+  .card-elevated:hover {
+    @apply shadow-elegant transform -translate-y-1;
+  }
+
+  /* Button Enhancements */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-card hover:shadow-elegant hover:scale-105;
+  }
+
+  .btn-secondary {
+    @apply bg-card text-card-foreground font-semibold py-3 px-6 rounded-lg border border-border transition-all duration-200 hover:bg-neutral-light hover:scale-105;
+  }
+
+  /* Badge Enhancements */
+  .badge-success {
+    @apply bg-green-500/20 text-green-300 px-3 py-1 rounded-full text-sm font-medium border border-green-500/30;
+  }
+
+  .badge-warning {
+    @apply bg-yellow-500/20 text-yellow-300 px-3 py-1 rounded-full text-sm font-medium border border-yellow-500/30;
+  }
+
+  .badge-error {
+    @apply bg-red-500/20 text-red-300 px-3 py-1 rounded-full text-sm font-medium border border-red-500/30;
+  }
+
+  .badge-info {
+    @apply bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full text-sm font-medium border border-blue-500/30;
+  }
+
+  /* Loading States */
+  .loading-skeleton {
+    @apply bg-muted animate-pulse rounded;
+  }
+
+  /* Focus States */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2;
+  }
+
+  /* Text Effects */
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+  }
+
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Custom Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: var(--muted);
+    border-radius: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+  }
+
+  /* Stat Cards */
+  .stat-card {
+    @apply bg-card rounded-2xl p-6 shadow-card border border-border hover:shadow-elegant transition-all duration-300 hover:scale-105;
+  }
+
+  /* Modal Enhancements */
+  .modal-backdrop {
+    @apply fixed inset-0 bg-black/50 backdrop-blur-sm z-50;
+  }
+
+  .modal-content {
+    @apply bg-card rounded-2xl shadow-elegant max-w-md w-full mx-auto p-6 transform transition-all duration-300;
+  }
+
+  /* Table Enhancements */
+  .table-modern {
+    @apply w-full border-collapse border border-border rounded-xl overflow-hidden;
+  }
+
+  .table-modern th {
+    @apply bg-muted text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider px-6 py-4;
+  }
+
+  .table-modern td {
+    @apply px-6 py-4 text-sm border-t border-border;
+  }
+
+  /* Form Enhancements */
+  .form-group {
+    @apply space-y-4;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-foreground mb-2;
+  }
+
+  .input-modern {
+    @apply w-full px-4 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200;
+  }
+
+  /* Navigation Enhancements */
+  .nav-link {
+    @apply text-muted-foreground hover:text-foreground px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-accent/10;
+  }
+
+  .nav-link.active {
+    @apply bg-primary text-primary-foreground;
+  }
+
+  /* Dropdown Enhancements */
+  .dropdown-menu {
+    @apply absolute right-0 mt-2 w-56 bg-card rounded-xl shadow-elegant border border-border py-2 z-50;
+  }
+
+  .dropdown-item {
+    @apply px-4 py-3 text-sm text-card-foreground hover:bg-accent/10 rounded-lg transition-all duration-200;
+  }
+
+  /* Alert Enhancements */
+  .alert-success {
+    @apply bg-green-500/20 text-green-300 border border-green-500/30 px-4 py-3 rounded-xl;
+  }
+
+  .alert-warning {
+    @apply bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 px-4 py-3 rounded-xl;
+  }
+
+  .alert-error {
+    @apply bg-red-500/20 text-red-300 border border-red-500/30 px-4 py-3 rounded-xl;
+  }
+
+  .alert-info {
+    @apply bg-blue-500/20 text-blue-300 border border-blue-500/30 px-4 py-3 rounded-xl;
+  }
+
+  /* Responsive Grid */
+  .grid-responsive {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+  }
+
+  /* Spacing Utilities */
+  .space-y-6 > * + * {
+    margin-top: 1.5rem;
+  }
+
+  .space-x-4 > * + * {
+    margin-left: 1rem;
+  }
+
+  /* Selection */
+  ::selection {
+    @apply bg-primary/20 text-primary-foreground;
+  }
+
+  /* Focus Visible */
+  .focus-visible:focus-visible {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2;
   }
 }

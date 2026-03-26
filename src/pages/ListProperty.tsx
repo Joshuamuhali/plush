@@ -366,7 +366,7 @@ const ListProperty = () => {
                 <Button 
                   type="submit" 
                   disabled={isSubmitting}
-                  className="bg-blue-600 hover:bg-blue-700"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground"
                 >
                   {isSubmitting ? 'Submitting...' : 'Submit Property'}
                 </Button>

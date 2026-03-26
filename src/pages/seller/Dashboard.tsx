@@ -33,8 +33,8 @@ export default function SellerDashboard() {
 
       <div className="grid md:grid-cols-3 gap-8 mb-16">
         <div className="text-center">
-          <div className="bg-blue-50 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Check className="h-6 w-6 text-blue-600" />
+          <div className="bg-primary/10 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Check className="h-6 w-6 text-primary" />
           </div>
           <h3 className="font-semibold text-lg mb-2">Simple Process</h3>
           <p className="text-muted-foreground">
@@ -42,8 +42,8 @@ export default function SellerDashboard() {
           </p>
         </div>
         <div className="text-center">
-          <div className="bg-green-50 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
-            <TrendingUp className="h-6 w-6 text-green-600" />
+          <div className="bg-secondary/10 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+            <TrendingUp className="h-6 w-6 text-secondary" />
           </div>
           <h3 className="font-semibold text-lg mb-2">Maximum Exposure</h3>
           <p className="text-muted-foreground">
@@ -51,8 +51,8 @@ export default function SellerDashboard() {
           </p>
         </div>
         <div className="text-center">
-          <div className="bg-purple-50 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Shield className="h-6 w-6 text-purple-600" />
+          <div className="bg-accent/10 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Shield className="h-6 w-6 text-accent" />
           </div>
           <h3 className="font-semibold text-lg mb-2">No Upfront Costs</h3>
           <p className="text-muted-foreground">
@@ -61,7 +61,7 @@ export default function SellerDashboard() {
         </div>
       </div>
 
-      <div className="bg-blue-50 rounded-xl p-8 text-center">
+      <div className="bg-primary/5 rounded-xl p-8 text-center">
         <div className="max-w-2xl mx-auto">
           <div className="flex justify-center gap-1 mb-4">
             {[1, 2, 3, 4, 5].map((i) => (

@@ -18,6 +18,8 @@ export default defineConfig(({ mode }) => ({
     // Enable HMR
     hmr: {
       overlay: true,
+      port: 3000,
+      host: 'localhost',
     },
     // Proxy configuration for API requests if needed
     proxy: {

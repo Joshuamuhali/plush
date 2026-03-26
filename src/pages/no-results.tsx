@@ -161,7 +161,7 @@ export default function NoResults() {
                           id="name"
                           value={formData.name}
                           onChange={handleChange}
-                          className="block w-full pl-10 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                          className="block w-full pl-10 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary sm:text-sm"
                           placeholder="John Doe"
                           required
                         />
@@ -182,7 +182,7 @@ export default function NoResults() {
                           id="email"
                           value={formData.email}
                           onChange={handleChange}
-                          className="block w-full pl-10 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                          className="block w-full pl-10 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary sm:text-sm"
                           placeholder="your@email.com"
                           required
                         />
@@ -203,7 +203,7 @@ export default function NoResults() {
                           id="phone"
                           value={formData.phone}
                           onChange={handleChange}
-                          className="block w-full pl-10 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                          className="block w-full pl-10 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary sm:text-sm"
                           placeholder="+260 97 123 4567"
                         />
                       </div>
@@ -224,7 +224,7 @@ export default function NoResults() {
                           name="propertyType"
                           value={formData.propertyType}
                           onChange={handleChange}
-                          className="block w-full py-3 px-4 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                          className="block w-full py-3 px-4 border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary sm:text-sm"
                         >
                           <option value="house">House</option>
                           <option value="apartment">Apartment</option>
@@ -249,7 +249,7 @@ export default function NoResults() {
                           id="location"
                           value={formData.location}
                           onChange={handleChange}
-                          className="block w-full pl-10 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                          className="block w-full pl-10 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary sm:text-sm"
                           placeholder="e.g., Lusaka, Woodlands"
                           required
                         />
@@ -268,7 +268,7 @@ export default function NoResults() {
                             id="budget"
                             value={formData.budget}
                             onChange={handleChange}
-                            className="block w-full py-3 px-4 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            className="block w-full py-3 px-4 border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary sm:text-sm"
                             placeholder="500,000"
                           />
                         </div>
@@ -284,7 +284,7 @@ export default function NoResults() {
                             name="bedrooms"
                             value={formData.bedrooms}
                             onChange={handleChange}
-                            className="block w-full py-3 px-4 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            className="block w-full py-3 px-4 border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary sm:text-sm"
                           >
                             <option value="">Any</option>
                             <option value="1">1+</option>
@@ -310,7 +310,7 @@ export default function NoResults() {
                       rows={4}
                       value={formData.message}
                       onChange={handleChange}
-                      className="block w-full py-3 px-4 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      className="block w-full py-3 px-4 border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary sm:text-sm"
                       placeholder="Tell us more about the property you're looking for..."
                     />
                   </div>
@@ -320,7 +320,7 @@ export default function NoResults() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full flex justify-center items-center py-4 px-6 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-70 disabled:cursor-not-allowed"
+                    className="w-full flex justify-center items-center py-4 px-6 border border-transparent rounded-lg shadow-sm text-base font-medium text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-70 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (
                       'Submitting...'
@@ -344,7 +344,7 @@ export default function NoResults() {
               <div className="text-center">
                 <p className="text-sm text-gray-500">
                   Need immediate assistance? Call us at{' '}
-                  <a href="tel:+260977777777" className="font-medium text-blue-600 hover:text-blue-500">
+                  <a href="tel:+260977777777" className="font-medium text-primary hover:text-primary/80">
                     +260 97 777 7777
                   </a>
                 </p>
