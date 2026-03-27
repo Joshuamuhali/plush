@@ -20,13 +20,14 @@ import {
   Search
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import { useProperties } from '@/hooks/useProperties';
 import { Link } from 'react-router-dom';
-import { sampleProperties } from '@/data/properties';
+import { featuredProperties } from '@/data/properties';
+import { supabase } from '@/lib/supabase';
+import type { PropertyFilters } from '@/services/supabase/propertyService';
 
 export default function Explore() {
   const { user } = useAuth();
-  const [properties, setProperties] = useState(sampleProperties);
-  const [loading, setLoading] = useState(false);
   const [savedProperties, setSavedProperties] = useState<Set<string>>(new Set());
   const [activeTab, setActiveTab] = useState('foryou');
   const [searchQuery, setSearchQuery] = useState('');
@@ -38,69 +39,27 @@ export default function Explore() {
     bedrooms: 'all',
   });
 
+  // Build filters for the query
+  const queryFilters: PropertyFilters = {};
+  if (filters.type && filters.type !== 'all') {
+    queryFilters.property_type = filters.type as any;
+  }
+  if (filters.minPrice) {
+    queryFilters.min_price = parseInt(filters.minPrice);
+  }
+  if (filters.maxPrice) {
+    queryFilters.max_price = parseInt(filters.maxPrice);
+  }
+  if (filters.bedrooms && filters.bedrooms !== 'all') {
+    queryFilters.bedrooms = parseInt(filters.bedrooms);
+  }
+
+  // Use the properties hook for marketplace data
+  const { data: marketplaceData, isLoading: marketplaceLoading, error: marketplaceError } = useProperties(queryFilters);
+
   useEffect(() => {
     fetchSavedProperties();
   }, [user]);
-
-  useEffect(() => {
-    filterProperties();
-  }, [filters, searchQuery]);
-
-  const fetchSavedProperties = async () => {
-    if (!user) return;
-    
-    try {
-      const { data } = await supabase
-        .from('saved_properties')
-        .select('property_id')
-        .eq('user_id', user.id);
-
-      if (data) {
-        setSavedProperties(new Set(data.map(item => item.property_id)));
-      }
-    } catch (error) {
-      console.error('Error fetching saved properties:', error);
-    }
-  };
-
-  const filterProperties = () => {
-    let filtered = sampleProperties;
-
-    // Apply search
-    if (searchQuery) {
-      filtered = filtered.filter(property => 
-        property.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        property.description.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    // Apply filters
-    if (filters.type && filters.type !== 'all') {
-      filtered = filtered.filter(property => property.type === filters.type);
-    }
-    if (filters.location) {
-      filtered = filtered.filter(property => 
-        property.location.toLowerCase().includes(filters.location.toLowerCase())
-      );
-    }
-    if (filters.minPrice) {
-      filtered = filtered.filter(property => 
-        typeof property.price === 'number' && property.price >= parseInt(filters.minPrice)
-      );
-    }
-    if (filters.maxPrice) {
-      filtered = filtered.filter(property => 
-        typeof property.price === 'number' && property.price <= parseInt(filters.maxPrice)
-      );
-    }
-    if (filters.bedrooms && filters.bedrooms !== 'all') {
-      filtered = filtered.filter(property => 
-        property.bedrooms >= parseInt(filters.bedrooms)
-      );
-    }
-
-    setProperties(filtered);
-  };
 
   const toggleSaveProperty = async (propertyId: string) => {
     if (!user) {
@@ -166,19 +125,38 @@ export default function Explore() {
     });
   };
 
-  const filteredProperties = properties.filter(property => {
+  const fetchSavedProperties = async () => {
+    if (!user) return;
+    
+    try {
+      const { data } = await supabase
+        .from('saved_properties')
+        .select('property_id')
+        .eq('user_id', user.id);
+
+      if (data) {
+        setSavedProperties(new Set(data.map(item => item.property_id)));
+      }
+    } catch (error) {
+      console.error('Error fetching saved properties:', error);
+    }
+  };
+
+  const marketplaceProperties = marketplaceData?.data || [];
+  const loading = marketplaceLoading;
+  const filteredMarketplaceProperties = marketplaceProperties.filter(property => {
     if (searchQuery) {
       const searchLower = searchQuery.toLowerCase();
       return (
         property.title.toLowerCase().includes(searchLower) ||
         property.location.toLowerCase().includes(searchLower) ||
-        property.type.toLowerCase().includes(searchLower)
+        property.property_type.toLowerCase().includes(searchLower)
       );
     }
     return true;
   });
 
-  const PropertyCard = ({ property }: { property: any }) => (
+  const PropertyCard = ({ property, isFeatured = false }: { property: any; isFeatured?: boolean }) => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -188,22 +166,23 @@ export default function Explore() {
       {/* Image Gallery */}
       <div className="relative h-64 bg-gray-200">
         <img
-          src={property.images[0] || '/placeholder.svg'}
+          src={property.featured_image_url || property.images?.[0]?.url || '/placeholder.svg'}
           alt={property.title}
           className="w-full h-full object-cover"
         />
         
         {/* Badges */}
         <div className="absolute top-3 left-3 flex gap-2">
+          {isFeatured && (
+            <Badge className="bg-purple-600 text-white">
+              <Star className="w-3 h-3 mr-1" />
+              Featured
+            </Badge>
+          )}
           {property.verified && (
             <Badge className="bg-blue-600 text-white">
               <Star className="w-3 h-3 mr-1" />
               Verified
-            </Badge>
-          )}
-          {property.featured && (
-            <Badge className="bg-purple-600 text-white">
-              Featured
             </Badge>
           )}
         </div>
@@ -221,7 +200,7 @@ export default function Explore() {
         </motion.button>
 
         {/* Image Counter */}
-        {property.images.length > 1 && (
+        {property.images && property.images.length > 1 && (
           <div className="absolute bottom-3 right-3 bg-black/60 text-white px-2 py-1 rounded-full text-xs">
             1/{property.images.length}
           </div>
@@ -255,10 +234,10 @@ export default function Explore() {
             <Building className="w-4 h-4 mr-1" />
             {property.bathrooms || '1'} bath
           </span>
-          {property.area && (
+          {property.area_m2 && (
             <span className="flex items-center">
               <Eye className="w-4 h-4 mr-1" />
-              {property.area}m²
+              {property.area_m2}m²
             </span>
           )}
         </div>
@@ -392,7 +371,7 @@ export default function Explore() {
             </div>
             
             <div className="text-sm text-gray-600 mt-2 sm:mt-0">
-              {filteredProperties.length} properties found
+              {filteredMarketplaceProperties.length} marketplace listings found
               {loading && <span className="ml-2 text-blue-600">(Loading...)</span>}
             </div>
           </div>
@@ -401,21 +380,52 @@ export default function Explore() {
 
       {/* Property Grid */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mb-20 md:mb-0">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProperties.map((property) => (
-            <PropertyCard key={property.id} property={property} />
-          ))}
-        </div>
-
-        {filteredProperties.length === 0 && (
-          <div className="text-center py-12">
-            <HomeIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No properties found</h3>
-            <p className="text-gray-600">
-              {searchQuery ? 'Try adjusting your search terms' : 'Check back later for new listings'}
-            </p>
+        {/* Featured Properties Section */}
+        <section className="mb-12">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">Featured Properties</h2>
+            <Badge className="bg-purple-100 text-purple-800">
+              Curated by Our Team
+            </Badge>
           </div>
-        )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featuredProperties.map((property) => (
+              <PropertyCard key={property.id} property={property} isFeatured={true} />
+            ))}
+          </div>
+        </section>
+
+        {/* Marketplace Listings Section */}
+        <section>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">Latest Marketplace Listings</h2>
+            <Badge className="bg-blue-100 text-blue-800">
+              From Real Sellers
+            </Badge>
+          </div>
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredMarketplaceProperties.map((property) => (
+                  <PropertyCard key={property.id} property={property} isFeatured={false} />
+                ))}
+              </div>
+              {filteredMarketplaceProperties.length === 0 && (
+                <div className="text-center py-12">
+                  <HomeIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No marketplace listings found</h3>
+                  <p className="text-gray-600">
+                    {searchQuery ? 'Try adjusting your search terms' : 'Check back later for new listings'}
+                  </p>
+                </div>
+              )}
+            </>
+          )}
+        </section>
       </main>
     </div>
   );

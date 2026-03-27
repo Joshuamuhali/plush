@@ -24,7 +24,7 @@ const luxuryHomeImages = [
   { url: '/IMG_3911.jpeg', alt: 'Luxury Home - Backyard', isPrimary: false },
 ];
 
-export const sampleProperties: Property[] = [
+export const featuredProperties: Property[] = [
   // Plot 1: 25x40 Plot in Chilanga
   {
     id: '1',

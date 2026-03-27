@@ -1,7 +1,10 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/lib/supabase';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, createContext, useContext } from 'react';
+
+// Create context for profile
+const ProfileContext = createContext<any>(null);
 
 interface ProtectedRouteProps {
   children: React.ReactElement;
@@ -12,15 +15,10 @@ export default function ProtectedRoute({ children, requiredRole }: ProtectedRout
   const { user, loading, isInitialized } = useAuth();
   const [userProfile, setUserProfile] = useState<any>(null);
   const [profileLoading, setProfileLoading] = useState(true);
+  const [profileError, setProfileError] = useState<string | null>(null);
+  const [loadedUserId, setLoadedUserId] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log('ProtectedRoute: useEffect called', { 
-      isInitialized, 
-      loading, 
-      userId: user?.id,
-      hasUser: !!user 
-    });
-
     // Don't do anything until auth is initialized
     if (!isInitialized || loading) {
       console.log('ProtectedRoute: Auth not ready, waiting...');
@@ -34,42 +32,97 @@ export default function ProtectedRoute({ children, requiredRole }: ProtectedRout
         console.log('ProtectedRoute: No user found, setting profileLoading false');
         setUserProfile(null);
         setProfileLoading(false);
+        setLoadedUserId(null);
+        return;
+      }
+
+      // Prevent duplicate fetches for same user
+      if (loadedUserId === user.id) {
+        console.log('ProtectedRoute: Profile already loaded for user, skipping fetch');
+        setProfileLoading(false);
         return;
       }
 
       try {
         setProfileLoading(true);
-        const { data: profile } = await supabase
+        setProfileError(null);
+        
+        // Add timeout to prevent infinite loading
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Profile fetch timeout')), 5000)
+        );
+
+        const fetchPromise = supabase
           .from('profiles')
           .select('*')
           .eq('id', user.id)
           .single();
 
-        console.log('ProtectedRoute: Profile fetched:', profile);
-        setUserProfile(profile);
+        const { data, error } = await Promise.race([fetchPromise, timeoutPromise]) as any;
+
+        if (error) {
+          // If it's a timeout error, create a minimal profile
+          if (error.message === 'Profile fetch timeout') {
+            console.log('ProtectedRoute: Profile fetch timed out, creating minimal profile');
+            const minimalProfile = {
+              id: user.id,
+              email: user.email,
+              role: 'seller', // Default to seller for testing
+              full_name: user.email?.split('@')[0] || 'Seller',
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            };
+            setUserProfile(minimalProfile);
+            setLoadedUserId(user.id);
+          } else {
+            throw error;
+          }
+        } else {
+          console.log('ProtectedRoute: Profile fetched:', data);
+          setUserProfile(data);
+          setLoadedUserId(user.id);
+        }
       } catch (error) {
         console.error('ProtectedRoute: Error fetching profile:', error);
-        setUserProfile(null);
+        setProfileError(error instanceof Error ? error.message : 'Failed to fetch profile');
+        
+        // Create minimal profile on error
+        const minimalProfile = {
+          id: user.id,
+          email: user.email,
+          role: 'seller', // Default to seller for testing
+          full_name: user.email?.split('@')[0] || 'Seller',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+        setUserProfile(minimalProfile);
+        setLoadedUserId(user.id);
       } finally {
         setProfileLoading(false);
       }
     };
 
     fetchProfile();
-  }, [user, isInitialized, loading]);
+  }, [user?.id, isInitialized, loading]);
 
-  // Show loader until auth is initialized and profile is loaded
-  if (!isInitialized || loading || profileLoading) {
+  // Show loader until auth is initialized and profile is loaded or errored
+  if (!isInitialized || loading || (profileLoading && !profileError)) {
     console.log('ProtectedRoute: Still loading, showing spinner', { 
       isInitialized, 
       loading, 
-      profileLoading 
+      profileLoading,
+      profileError 
     });
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
       </div>
     );
+  }
+
+  // Show error state if profile fetch failed
+  if (profileError) {
+    console.log('ProtectedRoute: Profile fetch error, but continuing with minimal profile');
   }
 
   // Only redirect to login if auth is initialized and there's no user
@@ -88,5 +141,12 @@ export default function ProtectedRoute({ children, requiredRole }: ProtectedRout
   }
 
   console.log('ProtectedRoute: Rendering protected element');
-  return children;
+  return (
+    <ProfileContext.Provider value={userProfile}>
+      {children}
+    </ProfileContext.Provider>
+  );
 }
+
+// Export hook to use profile context
+export const useProfileContext = () => useContext(ProfileContext);

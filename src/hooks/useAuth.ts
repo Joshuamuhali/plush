@@ -1,56 +1,16 @@
-import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
-import type { User } from '@supabase/supabase-js';
+import { useAuthContext } from '@/app/providers/AuthProvider';
 
 export const useAuth = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  useEffect(() => {
-    let mounted = true;
-
-    const init = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        
-        if (!mounted) return;
-
-        setUser(session?.user ?? null);
-        setIsInitialized(true);
-        setLoading(false);
-        
-        console.log('Auth initialized:', { user: session?.user?.id, hasSession: !!session });
-      } catch (error) {
-        console.error('Auth initialization error:', error);
-        if (mounted) {
-          setUser(null);
-          setIsInitialized(true);
-          setLoading(false);
-        }
-      }
-    };
-
-    init();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        if (!mounted) return;
-        
-        console.log('Auth state changed:', { event: _event, userId: session?.user?.id });
-        setUser(session?.user ?? null);
-        setIsInitialized(true);
-        setLoading(false);
-      }
-    );
-
-    return () => {
-      mounted = false;
-      subscription?.unsubscribe();
-    };
-  }, []);
-
-  return { user, loading, isInitialized };
+  const { user, loading, isInitialized, signIn, signUp, signOut } = useAuthContext();
+  
+  return { 
+    user, 
+    loading, 
+    isInitialized, 
+    signIn: signIn as any, 
+    signUp: signUp as any, 
+    signOut: signOut as any 
+  };
 };
 
 export const useSignUp = () => {
